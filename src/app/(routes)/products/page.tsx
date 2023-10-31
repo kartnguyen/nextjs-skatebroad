@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { fetcher, formattedPrice, items } from "@/app/_assets/libs";
+import { formattedPrice, items } from "@/app/_assets/libs";
 import { Breadcrumb, Drawer, Dropdown, Space } from "antd";
 import {
   FilterOutlined,
@@ -10,12 +10,11 @@ import {
   ShoppingOutlined,
   SearchOutlined,
   HeartOutlined,
-  CloseOutlined,
 } from "@ant-design/icons";
-import useSWR from "swr";
 import Link from "next/link";
 import Loader from "@/app/_assets/components/Loader";
 import { IProduct } from "@/app/_assets/types/product";
+import ProductServices from "@/app/_assets/services/products.services";
 
 const Products = () => {
   const [sortingLabel, setSortingLabel] = useState("Sorting");
@@ -25,11 +24,7 @@ const Products = () => {
   const [loading, setLoading] = useState(false);
   const [sort, setSort] = useState("");
 
-  const {
-    data: products,
-    error,
-    isLoading,
-  } = useSWR<any>(`/api/products`, fetcher);
+  const { products, error, isLoading } = ProductServices();
 
   const filteredProducts = () => {
     if (currentFilter === "" && currentFilterType === "" && sort === "") {
@@ -87,6 +82,7 @@ const Products = () => {
   const onClose = () => {
     setOpen(false);
   };
+
   if (isLoading) return <Loader />;
   if (!products) return null;
   return (
