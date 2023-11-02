@@ -18,6 +18,13 @@ import Loader from "../_assets/components/Loader";
 import { IProduct } from "../_assets/types/product";
 import { MDBCarousel, MDBCarouselItem } from "mdb-react-ui-kit";
 import Notification from "../_assets/components/Notification";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  CartState,
+  add,
+  remove,
+  update,
+} from "../_assets/redux/features/cart/cartSlice";
 
 const Home = () => {
   const [showImage, setShowImage] = useState<boolean>(false);
@@ -34,6 +41,7 @@ const Home = () => {
   } = useForm();
 
   const key = "updatable";
+  const dispatch = useDispatch();
 
   const items = products ? products.result : null;
 
@@ -57,8 +65,8 @@ const Home = () => {
     }, 500);
   };
 
-  const handleQuickview = (id: number) => {
-    const pro = items.find((product: IProduct) => product.id === +id);
+  const handleQuickview = (id: string) => {
+    const pro = items.find((product: IProduct) => product.id === id);
     setCurrentImg(pro.images);
     document.body.classList.add("overflow-hidden");
     setShowImage(true);
@@ -90,6 +98,10 @@ const Home = () => {
     }, 1000);
   };
 
+  const onAddItem = (product: IProduct) => {
+    Notification(product, 1);
+    dispatch(add({ product: product, quantity: 1 }));
+  };
   if (isLoading) return <Loader />;
   if (!products) return null;
   return (
@@ -457,10 +469,7 @@ const Home = () => {
                   <p>{formattedPrice(product.price)}</p>
                 </div>
                 <div className="menu">
-                  <div
-                    className="icon"
-                    onClick={() => Notification(product, 1)}
-                  >
+                  <div className="icon" onClick={() => onAddItem(product)}>
                     <ShoppingOutlined title="Add To Cart" />
                   </div>
                   <div

@@ -1,4 +1,4 @@
-import { Provider } from "react-redux";
+import { Providers } from "@/app/_assets/redux/provider";
 import BackToTop from "../_assets/components/BackToTop";
 import Footer from "../_assets/components/Footer";
 import Header from "../_assets/components/Header";
@@ -11,12 +11,12 @@ export default function HomeLayout({
 }) {
   return (
     <>
-      <Provider store={store}>
+      <Providers>
         <Header />
         {children}
         <Footer />
         <BackToTop />
-      </Provider>
+      </Providers>
     </>
   );
 }

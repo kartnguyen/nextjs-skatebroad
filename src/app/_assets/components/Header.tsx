@@ -12,12 +12,16 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectCartTotalQuantity } from "@/app/_assets/redux/features/cart/cartSlice";
+import { RootState } from "../redux/store";
 
 const Header = () => {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [fixed, setFixed] = useState(false);
-  const totalItems = 1;
+
+  const totalItems = useSelector((state: RootState) =>
+    selectCartTotalQuantity(state.cart)
+  );
 
   const showDrawer = () => {
     setOpen(true);

@@ -10,17 +10,26 @@ import { IProduct } from "@/app/_assets/types/product";
 import Loader from "@/app/_assets/components/Loader";
 import Details from "@/app/_assets/components/Details";
 import Notification from "@/app/_assets/components/Notification";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  CartState,
+  add,
+  remove,
+  update,
+} from "@/app/_assets/redux/features/cart/cartSlice";
 
-export default function ProductDetail({ params }: { params: { id: number } }) {
+export default function ProductDetail({ params }: { params: { id: string } }) {
   const [loading, setLoading] = useState<boolean>(true);
   const [currentImg, setCurrentImg] = useState<string>("");
   const [quantity, setQuantity] = useState<number | undefined>();
   const { products, isLoading } = ProductServices();
 
-  const product: IProduct | null =
+  const product: IProduct =
     products && products.result
-      ? products.result.find((product: IProduct) => product.id === +params.id)
+      ? products.result.find((product: IProduct) => product.id == params.id)
       : null;
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (product) {
@@ -53,6 +62,11 @@ export default function ProductDetail({ params }: { params: { id: number } }) {
     }
   };
 
+  const onAddItem = (product: IProduct, quantity: number) => {
+    Notification(product, quantity);
+    dispatch(add({ product, quantity }));
+  };
+
   if (isLoading) return <Loader />;
   if (!products) return null;
   return (
@@ -62,12 +76,10 @@ export default function ProductDetail({ params }: { params: { id: number } }) {
           separator=">"
           items={[
             {
-              title: "Home",
-              href: "/",
+              title: <Link href="/">Home</Link>,
             },
             {
-              title: "Products",
-              href: "/products",
+              title: <Link href="/products">Products</Link>,
             },
             {
               title: product?.name,
@@ -125,7 +137,7 @@ export default function ProductDetail({ params }: { params: { id: number } }) {
                     </div>
                     <button
                       className="btn-add"
-                      onClick={() => Notification(product, quantity)}
+                      onClick={() => onAddItem(product, quantity)}
                     >
                       add to cart
                     </button>

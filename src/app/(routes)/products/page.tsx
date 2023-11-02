@@ -18,6 +18,13 @@ import { IProduct } from "@/app/_assets/types/product";
 import ProductServices from "@/app/_assets/services/products.services";
 import Notification from "@/app/_assets/components/Notification";
 import { MDBCarousel, MDBCarouselItem } from "mdb-react-ui-kit";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  CartState,
+  add,
+  remove,
+  update,
+} from "@/app/_assets/redux/features/cart/cartSlice";
 
 const Products: React.FC = () => {
   const [showImage, setShowImage] = useState<boolean>(false);
@@ -30,6 +37,7 @@ const Products: React.FC = () => {
   const [sort, setSort] = useState<string>("");
 
   const { products, error, isLoading } = ProductServices();
+  const dispatch = useDispatch();
 
   const filteredProducts = (): IProduct[] => {
     if (currentFilter === "" && currentFilterType === "" && sort === "") {
@@ -94,10 +102,8 @@ const Products: React.FC = () => {
     setOpen(false);
   };
 
-  const handleQuickview = (id: number): void => {
-    const pro = products?.result.find(
-      (product: IProduct) => product.id === +id
-    );
+  const handleQuickview = (id: string): void => {
+    const pro = products?.result.find((product: IProduct) => product.id === id);
     setCurrentImg(pro.images);
     document.body.classList.add("overflow-hidden");
     setShowImage(true);
@@ -106,6 +112,11 @@ const Products: React.FC = () => {
   const handleCloseImg = (): void => {
     setShowImage(false);
     document.body.classList.remove("overflow-hidden");
+  };
+
+  const onAddItem = (product: IProduct) => {
+    Notification(product, 1);
+    dispatch(add({ product: product, quantity: 1 }));
   };
 
   if (isLoading) return <Loader />;
@@ -119,8 +130,7 @@ const Products: React.FC = () => {
           separator=">"
           items={[
             {
-              title: "Home",
-              href: "/",
+              title: <Link href="/">Home</Link>,
             },
             {
               title: "Products",
@@ -349,7 +359,7 @@ const Products: React.FC = () => {
                 <p>{formattedPrice(product.price)}</p>
               </div>
               <div className="menu">
-                <div className="icon" onClick={() => Notification(product, 1)}>
+                <div className="icon" onClick={() => onAddItem(product)}>
                   <ShoppingOutlined title="Add To Cart" />
                 </div>
                 <div

@@ -1,3 +1,5 @@
+"use client";
+
 import { IProduct } from "@/app/_assets/types/product";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
@@ -6,7 +8,7 @@ interface CartItem {
   quantity: number;
 }
 
-interface CartState {
+export interface CartState {
   items: CartItem[];
 }
 
@@ -29,14 +31,14 @@ export const cartSlice = createSlice({
         state.items.push(action.payload);
       }
     },
-    remove: (state, action: PayloadAction<{ productId: number }>) => {
+    remove: (state, action: PayloadAction<{ productId: string }>) => {
       state.items = state.items.filter(
         (item) => item.product.id !== action.payload.productId
       );
     },
     update: (
       state,
-      action: PayloadAction<{ productId: number; quantity: number }>
+      action: PayloadAction<{ productId: string; quantity: number }>
     ) => {
       const { productId, quantity } = action.payload;
       const existingItem = state.items.find(

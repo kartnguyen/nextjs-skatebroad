@@ -9,8 +9,7 @@ const Wishlist = () => {
           separator=">"
           items={[
             {
-              title: "Home",
-              href: "/",
+              title: <Link href="/">Home</Link>,
             },
             {
               title: "Your Wishlist",

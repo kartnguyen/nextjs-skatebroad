@@ -10,8 +10,7 @@ const Blog = () => {
           separator=">"
           items={[
             {
-              title: "Home",
-              href: "/",
+              title: <Link href="/">Home</Link>,
             },
             {
               title: "News",
