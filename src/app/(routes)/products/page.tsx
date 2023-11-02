@@ -10,23 +10,28 @@ import {
   ShoppingOutlined,
   SearchOutlined,
   HeartOutlined,
+  CloseOutlined,
 } from "@ant-design/icons";
 import Link from "next/link";
 import Loader from "@/app/_assets/components/Loader";
 import { IProduct } from "@/app/_assets/types/product";
 import ProductServices from "@/app/_assets/services/products.services";
+import Notification from "@/app/_assets/components/Notification";
+import { MDBCarousel, MDBCarouselItem } from "mdb-react-ui-kit";
 
-const Products = () => {
-  const [sortingLabel, setSortingLabel] = useState("Sorting");
-  const [open, setOpen] = useState(false);
-  const [currentFilter, setCurrentFilter] = useState("");
-  const [currentFilterType, setCurrentFilterType] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [sort, setSort] = useState("");
+const Products: React.FC = () => {
+  const [showImage, setShowImage] = useState<boolean>(false);
+  const [currentImg, setCurrentImg] = useState<string>("");
+  const [sortingLabel, setSortingLabel] = useState<string>("Sorting");
+  const [open, setOpen] = useState<boolean>(false);
+  const [currentFilter, setCurrentFilter] = useState<string>("");
+  const [currentFilterType, setCurrentFilterType] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [sort, setSort] = useState<string>("");
 
   const { products, error, isLoading } = ProductServices();
 
-  const filteredProducts = () => {
+  const filteredProducts = (): IProduct[] => {
     if (currentFilter === "" && currentFilterType === "" && sort === "") {
       return products.result;
     }
@@ -59,7 +64,13 @@ const Products = () => {
     return filterProducts;
   };
 
-  const handleFilter = ({ type, params }: { type: string; params: string }) => {
+  const handleFilter = ({
+    type,
+    params,
+  }: {
+    type: string;
+    params: string;
+  }): void => {
     setLoading(true);
     document.body.classList.add("overflow-hidden");
     setTimeout(() => {
@@ -70,21 +81,36 @@ const Products = () => {
     }, 800);
   };
 
-  const handleSortingLabel = (label: string) => {
+  const handleSortingLabel = (label: string): void => {
     setSortingLabel(label);
     setSort(label);
   };
 
-  const showDrawer = () => {
+  const showDrawer = (): void => {
     setOpen(true);
   };
 
-  const onClose = () => {
+  const onClose = (): void => {
     setOpen(false);
+  };
+
+  const handleQuickview = (id: number): void => {
+    const pro = products?.result.find(
+      (product: IProduct) => product.id === +id
+    );
+    setCurrentImg(pro.images);
+    document.body.classList.add("overflow-hidden");
+    setShowImage(true);
+  };
+
+  const handleCloseImg = (): void => {
+    setShowImage(false);
+    document.body.classList.remove("overflow-hidden");
   };
 
   if (isLoading) return <Loader />;
   if (!products) return null;
+
   return (
     <section>
       <div className="breadcrumb">
@@ -323,10 +349,13 @@ const Products = () => {
                 <p>{formattedPrice(product.price)}</p>
               </div>
               <div className="menu">
-                <div className="icon">
+                <div className="icon" onClick={() => Notification(product, 1)}>
                   <ShoppingOutlined title="Add To Cart" />
                 </div>
-                <div className="icon">
+                <div
+                  className="icon"
+                  onClick={() => handleQuickview(product.id)}
+                >
                   <SearchOutlined title="Quickview" />
                 </div>
                 <Link href={"/wishlist"} id="wishlist-btn">
@@ -339,6 +368,29 @@ const Products = () => {
           ))}
         </div>
       </div>
+      {showImage ? (
+        <div className="img-quickview-container">
+          <div className="img-quickview">
+            <MDBCarousel showControls dark>
+              <MDBCarouselItem
+                itemId={1}
+                className="d-block w-100"
+                src={currentImg[0]}
+                alt="..."
+              />
+              <MDBCarouselItem
+                itemId={2}
+                className="d-block w-100"
+                src={currentImg[1]}
+                alt="..."
+              />
+            </MDBCarousel>
+            <div className="close-image" onClick={handleCloseImg}>
+              <CloseOutlined />
+            </div>
+          </div>
+        </div>
+      ) : null}
       {loading ? (
         <div className="img-quickview-container">
           <span className="loader-1"></span>

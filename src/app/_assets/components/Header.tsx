@@ -10,12 +10,13 @@ import { Drawer } from "antd";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { selectCartTotalQuantity } from "@/app/_assets/redux/features/cart/cartSlice";
 
 const Header = () => {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [fixed, setFixed] = useState(false);
-  // const { totalItems } = useCartContext();
   const totalItems = 1;
 
   const showDrawer = () => {

@@ -7,7 +7,7 @@ const Rated = () => {
   return (
     <MDBCarousel showControls showIndicators dark>
       {user.map((item) => (
-        <MDBCarouselItem key={item.id}>
+        <MDBCarouselItem itemId={item.id} key={item.id}>
           <div className="container">
             <div className="user-rated">
               {item.rated === 5 ? (

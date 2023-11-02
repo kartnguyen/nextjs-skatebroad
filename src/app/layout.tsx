@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import "@/app/_assets/libs/style.css";
 import "@/app/_assets/libs/animate.css";
+import "@fortawesome/fontawesome-free/css/all.min.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
