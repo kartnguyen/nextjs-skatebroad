@@ -285,9 +285,11 @@ const Login = () => {
             title="Functions are being upgraded!"
             subTitle="Thank you. Please come back later."
             extra={[
-              <Button type="primary" key="home" onClick={onHomepage}>
-                <Link href="/">Go to homepage</Link>
-              </Button>,
+              <Link href="/" key="home">
+                <Button type="primary" onClick={onHomepage}>
+                  Go to homepage
+                </Button>
+              </Link>,
             ]}
           />
         </div>

@@ -1,5 +1,5 @@
-import useSWR from "swr";
 import { fetcher } from "@/app/_assets/libs";
+import useSWR from "swr";
 
 const ProductServices = () => {
   const {
