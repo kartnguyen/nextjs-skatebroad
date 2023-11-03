@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { Button, Col, Flex, Row, Space, Typography, message } from "antd";
@@ -18,13 +19,8 @@ import Loader from "../_assets/components/Loader";
 import { IProduct } from "../_assets/types/product";
 import { MDBCarousel, MDBCarouselItem } from "mdb-react-ui-kit";
 import Notification from "../_assets/components/Notification";
-import { useSelector, useDispatch } from "react-redux";
-import {
-  CartState,
-  add,
-  remove,
-  update,
-} from "../_assets/redux/features/cart/cartSlice";
+import { useDispatch } from "react-redux";
+import { add } from "../_assets/redux/features/cart/cartSlice";
 
 const Home = () => {
   const [showImage, setShowImage] = useState<boolean>(false);

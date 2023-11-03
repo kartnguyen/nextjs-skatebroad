@@ -10,13 +10,8 @@ import { IProduct } from "@/app/_assets/types/product";
 import Loader from "@/app/_assets/components/Loader";
 import Details from "@/app/_assets/components/Details";
 import Notification from "@/app/_assets/components/Notification";
-import { useSelector, useDispatch } from "react-redux";
-import {
-  CartState,
-  add,
-  remove,
-  update,
-} from "@/app/_assets/redux/features/cart/cartSlice";
+import { useDispatch } from "react-redux";
+import { add } from "@/app/_assets/redux/features/cart/cartSlice";
 
 export default function ProductDetail({ params }: { params: { id: string } }) {
   const [loading, setLoading] = useState<boolean>(true);
@@ -137,7 +132,7 @@ export default function ProductDetail({ params }: { params: { id: string } }) {
                     </div>
                     <button
                       className="btn-add"
-                      onClick={() => onAddItem(product, quantity)}
+                      onClick={() => onAddItem(product, quantity || 0)}
                     >
                       add to cart
                     </button>

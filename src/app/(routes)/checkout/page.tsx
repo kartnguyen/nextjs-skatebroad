@@ -3,20 +3,13 @@
 import { RootState } from "@/app/_assets/redux/store";
 import { Breadcrumb, Image, Table } from "antd";
 import { useForm } from "react-hook-form";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  CartState,
-  add,
-  remove,
-  selectCartTotalQuantity,
-  update,
-} from "@/app/_assets/redux/features/cart/cartSlice";
+import { useSelector } from "react-redux";
 import { formattedPrice } from "@/app/_assets/libs";
 import Link from "next/link";
 
 const Checkout: React.FC = () => {
-  const dispatch = useDispatch();
   const cartState = useSelector((state: RootState) => state.cart);
+  const order = JSON.parse(localStorage.getItem("order") || "{}");
 
   let totalPrice = 0;
   let totalProducts = 0;
@@ -84,6 +77,7 @@ const Checkout: React.FC = () => {
     formState: { errors },
   } = useForm();
   const onSubmit = (data: any) => {
+    localStorage.setItem("order", JSON.stringify(data));
     window.location.pathname = "/confirm";
   };
   return (
@@ -123,6 +117,7 @@ const Checkout: React.FC = () => {
                       type="text"
                       id="name"
                       className="input"
+                      defaultValue={order.Name}
                       {...register("Name", {
                         required: true,
                         maxLength: 100,
@@ -151,6 +146,7 @@ const Checkout: React.FC = () => {
                       type="text"
                       id="phone"
                       className="input"
+                      defaultValue={order.Phone}
                       {...register("Phone", {
                         required: true,
                         pattern: /^[0-9]{10}$/,
@@ -181,6 +177,7 @@ const Checkout: React.FC = () => {
                     <input
                       type="text"
                       id="email"
+                      defaultValue={order.Email}
                       aria-invalid={errors.Email ? "true" : "false"}
                       className="input"
                       {...register("Email", {
@@ -215,6 +212,7 @@ const Checkout: React.FC = () => {
                     <input
                       type="text"
                       id="district"
+                      defaultValue={order.District}
                       aria-invalid={errors.District ? "true" : "false"}
                       className="input"
                       {...register("District", {
@@ -240,6 +238,7 @@ const Checkout: React.FC = () => {
                     </label>
                     <input
                       type="text"
+                      defaultValue={order.Address}
                       aria-invalid={errors.Address ? "true" : "false"}
                       id="address"
                       {...register("Address", {
@@ -270,7 +269,7 @@ const Checkout: React.FC = () => {
                       {...register("Date")}
                       className="input"
                       min={minDate}
-                      defaultValue={minDate}
+                      defaultValue={order.Date ? order.Date : minDate}
                     />
                   </div>
                   <div className="item">
@@ -279,6 +278,7 @@ const Checkout: React.FC = () => {
                     </label>
                     <textarea
                       id="note"
+                      defaultValue={order.note}
                       {...register("note")}
                       className="input"
                     />
@@ -297,6 +297,9 @@ const Checkout: React.FC = () => {
                         {...register("payment", {
                           required: true,
                         })}
+                        defaultChecked={
+                          order.payment === "online_payment" ? true : false
+                        }
                       />
                       <label htmlFor="item1" className="check-box" />
                       <p>Online Payment</p>
@@ -311,6 +314,9 @@ const Checkout: React.FC = () => {
                         {...register("payment", {
                           required: true,
                         })}
+                        defaultChecked={
+                          order.payment === "on_delivery" ? true : false
+                        }
                       />
                       <label className="check-box" htmlFor="item2" />
                       <p>Cash on Delivery</p>

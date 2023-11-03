@@ -11,10 +11,18 @@ interface CartItem {
 export interface CartState {
   items: CartItem[];
 }
+const storedCartData = localStorage.getItem("cart");
 
-const initialState: CartState = {
+let initialState: CartState = {
   items: [],
 };
+
+if (storedCartData) {
+  const parsedCartData = JSON.parse(storedCartData);
+  initialState = {
+    items: parsedCartData,
+  };
+}
 
 export const cartSlice = createSlice({
   name: "cart",
@@ -30,11 +38,15 @@ export const cartSlice = createSlice({
       } else {
         state.items.push(action.payload);
       }
+
+      localStorage.setItem("cart", JSON.stringify(state.items));
     },
     remove: (state, action: PayloadAction<{ productId: string }>) => {
       state.items = state.items.filter(
         (item) => item.product.id !== action.payload.productId
       );
+
+      localStorage.setItem("cart", JSON.stringify(state.items));
     },
     update: (
       state,
@@ -47,6 +59,13 @@ export const cartSlice = createSlice({
       if (existingItem) {
         existingItem.quantity = quantity;
       }
+
+      localStorage.setItem("cart", JSON.stringify(state.items));
+    },
+    removeAll: (state) => {
+      state.items = [];
+
+      localStorage.setItem("cart", JSON.stringify(state.items));
     },
   },
 });
@@ -55,6 +74,6 @@ export const selectCartTotalQuantity = (state: CartState) => {
   return state.items.reduce((total, item) => total + item.quantity, 0);
 };
 
-export const { add, remove, update } = cartSlice.actions;
+export const { add, remove, update, removeAll } = cartSlice.actions;
 
 export default cartSlice.reducer;

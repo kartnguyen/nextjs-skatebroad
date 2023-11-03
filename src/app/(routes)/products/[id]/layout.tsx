@@ -2,7 +2,7 @@ import { IProduct } from "@/app/_assets/types/product";
 import { Metadata } from "next";
 
 type Props = {
-  params: { id: number };
+  params: { id: string };
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -12,7 +12,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     `https://651a276d340309952f0ce8ff.mockapi.io/skates`
   ).then((res) => res.json());
 
-  const product = products.find((product: IProduct) => product.id === +id);
+  const product = products.find((product: IProduct) => product.id == id);
 
   return {
     title: `KarT | ${product.name}`,

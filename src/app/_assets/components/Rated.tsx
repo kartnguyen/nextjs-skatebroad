@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { MDBCarousel, MDBCarouselItem } from "mdb-react-ui-kit";
 import { user } from "../libs/index";
 import { Typography } from "antd";
@@ -49,6 +50,7 @@ const Rated = () => {
                   borderRadius: "50%",
                   margin: 32,
                 }}
+                alt=""
               />
             </div>
           </div>

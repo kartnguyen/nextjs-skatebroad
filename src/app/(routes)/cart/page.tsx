@@ -8,13 +8,7 @@ import {
 } from "@ant-design/icons";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  CartState,
-  add,
-  remove,
-  selectCartTotalQuantity,
-  update,
-} from "@/app/_assets/redux/features/cart/cartSlice";
+import { remove, update } from "@/app/_assets/redux/features/cart/cartSlice";
 import { RootState } from "@/app/_assets/redux/store";
 import { formattedPrice } from "@/app/_assets/libs";
 import Link from "next/link";
@@ -89,7 +83,6 @@ const Cart: React.FC = () => {
       dataIndex: "price",
       key: "price",
       render: (_: any, record: any) => formattedPrice(record.price),
-      responsive: ["md"],
     },
     {
       title: "Quantity",
@@ -143,7 +136,6 @@ const Cart: React.FC = () => {
         />
       ),
       width: 80,
-      align: "center",
     },
   ];
 

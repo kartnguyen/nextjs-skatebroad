@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { Breadcrumb } from "antd";
 import Link from "next/link";
 

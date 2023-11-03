@@ -18,13 +18,8 @@ import { IProduct } from "@/app/_assets/types/product";
 import ProductServices from "@/app/_assets/services/products.services";
 import Notification from "@/app/_assets/components/Notification";
 import { MDBCarousel, MDBCarouselItem } from "mdb-react-ui-kit";
-import { useSelector, useDispatch } from "react-redux";
-import {
-  CartState,
-  add,
-  remove,
-  update,
-} from "@/app/_assets/redux/features/cart/cartSlice";
+import { useDispatch } from "react-redux";
+import { add } from "@/app/_assets/redux/features/cart/cartSlice";
 
 const Products: React.FC = () => {
   const [showImage, setShowImage] = useState<boolean>(false);
