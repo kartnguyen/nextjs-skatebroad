@@ -286,6 +286,10 @@ a {
     margin: 60px auto;
 }
 
+.home h1 {
+    margin: 16px 0 !important;
+}
+
 @media (max-width:1100px) {
     .home h1 {
         font-size: 28px !important;
@@ -1251,7 +1255,7 @@ a {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 60vh;
+    height: 80vh;
 }
 
 .cart-page .no-results h1 {
@@ -1389,6 +1393,11 @@ a {
     .check-out .check-out-btn {
         padding: 8px 16px;
         letter-spacing: 0;
+    }
+
+    .spline-container {
+        transform: scale(0.8);
+        height: 300px;
     }
 }
 
@@ -2095,7 +2104,7 @@ header {
     gap: 24px;
 }
 
-.login {
+header .login {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -2587,7 +2596,7 @@ footer .logosvg img {
     width: 768px;
     max-width: 100%;
     margin: 60px auto;
-    min-height: 480px;
+    min-height: 840px;
 }
 
 .login-page .login p {
@@ -2731,7 +2740,6 @@ footer .logosvg img {
 }
 
 .login-page .toggle {
-    background-color: #512da8;
     height: 100%;
     background: linear-gradient(to right, #ff7245, #de6540);
     color: #fff;
@@ -2793,4 +2801,23 @@ footer .logosvg img {
 .login-page .eye svg {
     font-size: 18px;
     color: #555;
+}
+
+@media (max-width: 768px) {
+    .login-page .toggle-container {
+        position: relative;
+        left: 0;
+        width: 100%;
+        height: 200px;
+        border-radius: 0;
+    }
+
+    .login-page .sign-in {
+        width: 100%;
+    }
+
+    .login-page .login form {
+        justify-content: flex-end;
+        padding: 40px;
+    }
 }

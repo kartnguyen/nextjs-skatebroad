@@ -536,14 +536,22 @@ const Home = () => {
               </Space.Compact>
               {errors.email?.type === "required" && (
                 <p
-                  style={{ position: "absolute", marginTop: 10, color: "red" }}
+                  style={{
+                    position: "absolute",
+                    marginTop: 10,
+                    color: "red",
+                  }}
                 >
                   Email can not be left blank.
                 </p>
               )}
               {errors.email?.type === "pattern" && (
                 <p
-                  style={{ position: "absolute", marginTop: 10, color: "red" }}
+                  style={{
+                    position: "absolute",
+                    marginTop: 10,
+                    color: "red",
+                  }}
                 >
                   The email is not in the correct format.
                 </p>
@@ -588,7 +596,7 @@ const Home = () => {
                   deck into a fully rippable surf skate!
                 </Typography.Text>
               </div>
-              <Link href={"/products"}>
+              <Link href={"/aboutus"}>
                 <Button
                   className="btn-btn"
                   style={{ textTransform: "uppercase" }}
