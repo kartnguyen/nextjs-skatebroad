@@ -84,15 +84,6 @@ const Header = () => {
                 >
                   Blog
                 </Link>
-                <Link
-                  className={`nav-item ${
-                    pathname === "/abloutus" ? "active" : ""
-                  }`}
-                  href={"/about"}
-                  onClick={onClose}
-                >
-                  About
-                </Link>
               </div>
             </Drawer>
           </div>
@@ -119,12 +110,6 @@ const Header = () => {
               href={"/blog"}
             >
               Blog
-            </Link>
-            <Link
-              className={`nav-item ${pathname === "/abloutus" ? "active" : ""}`}
-              href={"/about"}
-            >
-              About
             </Link>
           </div>
           <div className="action">

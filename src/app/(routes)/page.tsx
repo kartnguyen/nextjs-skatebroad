@@ -596,7 +596,7 @@ const Home = () => {
                   deck into a fully rippable surf skate!
                 </Typography.Text>
               </div>
-              <Link href={"/aboutus"}>
+              <Link href={"/blog"}>
                 <Button
                   className="btn-btn"
                   style={{ textTransform: "uppercase" }}
