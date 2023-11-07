@@ -11,7 +11,12 @@ interface CartItem {
 export interface CartState {
   items: CartItem[];
 }
-const storedCartData = localStorage.getItem("cart");
+
+let storedCartData = null;
+
+if (typeof window !== "undefined") {
+  storedCartData = localStorage.getItem("cart");
+}
 
 let initialState: CartState = {
   items: [],

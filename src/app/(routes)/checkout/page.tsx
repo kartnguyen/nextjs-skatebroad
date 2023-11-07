@@ -9,7 +9,10 @@ import Link from "next/link";
 
 const Checkout: React.FC = () => {
   const cartState = useSelector((state: RootState) => state.cart);
-  const order = JSON.parse(localStorage.getItem("order") || "{}");
+  let order: any = {};
+  if (typeof window !== "undefined") {
+    order = JSON.parse(localStorage.getItem("order") || "{}");
+  }
 
   let totalPrice = 0;
   let totalProducts = 0;

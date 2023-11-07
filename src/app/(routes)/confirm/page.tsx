@@ -14,7 +14,10 @@ const Confirm = () => {
   const [isDone, setDone] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const cartState = useSelector((state: RootState) => state.cart);
-  const order = JSON.parse(localStorage.getItem("order") || "{}");
+  let order: any = {};
+  if (typeof window !== "undefined") {
+    order = JSON.parse(localStorage.getItem("order") || "{}");
+  }
 
   const dispatch = useDispatch();
 
