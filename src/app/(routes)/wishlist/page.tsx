@@ -20,7 +20,11 @@ const Wishlist = () => {
       <div className="no-results">
         <h1>You are not logged in!!!</h1>
         <p>
-          Log in and create your wishlist <Link href={"/login"}>here</Link>.
+          Log in and create your wishlist{" "}
+          <Link href={"/login"}>
+            <span style={{ textDecoration: "underline" }}>here</span>
+          </Link>
+          .
         </p>
       </div>
     </section>

@@ -198,9 +198,13 @@ const Cart: React.FC = () => {
           </div>
         ) : (
           <div className="no-results">
-            <h1>Your cart is currently empty.</h1>
+            <h1>Your cart is empty!!!</h1>
             <p>
-              Continue browsing <Link href="/products">here</Link>.
+              Continue browsing{" "}
+              <Link href="/products">
+                <span style={{ textDecoration: "underline" }}>here</span>
+              </Link>
+              .
             </p>
           </div>
         )}

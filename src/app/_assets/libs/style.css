@@ -260,7 +260,7 @@ a {
 }
 
 .text-2 {
-    right: 20%;
+    right: 15%;
 }
 
 .text-slider h1 {
@@ -1418,6 +1418,11 @@ a {
     .check-out .check-out-btn {
         padding: 8px 16px;
         letter-spacing: 0;
+    }
+
+    .cart-page .ant-table-wrapper {
+        width: 100%;
+        overflow: scroll;
     }
 }
 
@@ -2828,9 +2833,34 @@ footer .logosvg img {
 
     .login-page .toggle-container {
         border-radius: 12px 0 0 12px;
+        width: 40%;
+        left: 60%;
     }
 
     .login-page .login.active .toggle-container {
         border-radius: 0 12px 12px 0;
+        transform: translateX(-150%);
+    }
+
+    .login-page .sign-in,
+    .login-page .sign-up {
+        width: 60%;
+    }
+
+    .login-page .login.active .sign-up {
+        transform: translateX(66%);
+    }
+
+    .login-page .login button {
+        padding: 10px 40px;
+    }
+
+    .login-page .login span {
+        text-align: center;
+    }
+
+    .login-page .login p {
+        font-size: 12px;
+        letter-spacing: 0;
     }
 }
