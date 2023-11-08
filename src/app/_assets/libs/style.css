@@ -1422,7 +1422,7 @@ a {
 
     .cart-page .ant-table-wrapper {
         width: 100%;
-        overflow: scroll;
+        overflow-x: scroll;
     }
 }
 
