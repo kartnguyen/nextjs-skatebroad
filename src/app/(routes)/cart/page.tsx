@@ -12,6 +12,7 @@ import { remove, update } from "@/app/_assets/redux/features/cart/cartSlice";
 import { RootState } from "@/app/_assets/redux/store";
 import { formattedPrice } from "@/app/_assets/libs";
 import Link from "next/link";
+import type { ColumnsType } from "antd/es/table";
 
 const Cart: React.FC = () => {
   const [open, setOpen] = useState(false);
@@ -55,6 +56,15 @@ const Cart: React.FC = () => {
 
   const items = cartState.items;
 
+  interface DataType {
+    key: React.Key;
+    name: string;
+    price: number;
+    quantity: number;
+    img: string;
+    total: number;
+  }
+
   const dataSource = items.map((item) => ({
     key: item.product.id,
     name: item.product.name,
@@ -64,7 +74,7 @@ const Cart: React.FC = () => {
     total: item.product.price * item.quantity,
   }));
 
-  const columns = [
+  const columns: ColumnsType<DataType> = [
     {
       title: "Name",
       dataIndex: "name",
@@ -83,6 +93,7 @@ const Cart: React.FC = () => {
       dataIndex: "price",
       key: "price",
       render: (_: any, record: any) => formattedPrice(record.price),
+      responsive: ["md"],
     },
     {
       title: "Quantity",
@@ -182,6 +193,7 @@ const Cart: React.FC = () => {
               columns={columns}
               pagination={false}
               bordered
+              size="small"
             />
             <div className="check-out">
               <div className="total">

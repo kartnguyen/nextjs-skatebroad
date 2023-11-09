@@ -260,7 +260,7 @@ a {
 }
 
 .text-2 {
-    right: 15%;
+    right: 22%;
 }
 
 .text-slider h1 {
@@ -395,6 +395,10 @@ a {
 
     .home .filter-center .cate {
         font-size: 14px;
+    }
+
+    .text-2 {
+        right: 13%;
     }
 }
 
@@ -1420,9 +1424,19 @@ a {
         letter-spacing: 0;
     }
 
+    .cart-page .js-qty {
+        width: 70px;
+        margin: 0;
+    }
+
+    .cart-page .js-qty .qty_plus,
+    .cart-page .js-qty .qty_minus,
+    .cart-page .js-qty .qty-input {
+        width: 35px;
+    }
+
     .cart-page .ant-table-wrapper {
         width: 100%;
-        overflow-x: scroll;
     }
 }
 
