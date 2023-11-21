@@ -70,7 +70,12 @@ a {
 
 .ant-menu-title-content {
     font-weight: 600 !important;
-    font-size: 18px;
+}
+
+@media (min-width: 768px) {
+    .ant-menu-title-content {
+        font-size: 18px;
+    }
 }
 
 .back-to-top {
@@ -279,7 +284,7 @@ a {
 }
 
 .slider-container img {
-    min-height: 250px;
+    min-height: 350px;
 }
 
 .home .banner-container {
@@ -333,8 +338,12 @@ a {
         margin: 12px 0 !important;
     }
 
+    .btn-btn {
+        font-weight: 500 !important;
+    }
+
     .home h4 {
-        font-size: 14px !important;
+        font-size: 12px !important;
         margin: 0;
     }
 
@@ -383,6 +392,10 @@ a {
     .home .ant-flex .btn-btn {
         margin-top: 16px;
         padding: 8px 18px;
+    }
+
+    .home .ant-row .ant-col {
+        padding-inline: 0 !important;
     }
 
     .home .user-rated {
@@ -2388,9 +2401,13 @@ footer .logosvg img {
         gap: 0;
     }
 
-    footer .newsletter,
-    footer .center {
+    footer .newsletter {
         padding-top: 0;
+        border: none;
+    }
+
+    footer .center {
+        padding: 0;
         border: none;
     }
 
@@ -2429,10 +2446,17 @@ footer .logosvg img {
 
     footer .menu {
         padding-top: 46px;
+        justify-items: center;
+    }
+
+    footer .footer-center {
+        align-items: center;
     }
 
     footer .newsletter {
+        display: flex;
         align-items: center;
+        text-align: center;
     }
 
     footer .copyright .row {
@@ -2442,6 +2466,14 @@ footer .logosvg img {
 
     footer .copyright .text-copyright {
         margin-bottom: 16px;
+    }
+
+    footer .instagram-wrap {
+        margin: auto;
+    }
+
+    footer ul .list-item:first-child {
+        padding-top: 8px;
     }
 }
 

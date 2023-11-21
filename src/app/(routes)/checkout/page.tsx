@@ -1,11 +1,13 @@
 "use client";
 
+import { useEffect } from "react";
 import { RootState } from "@/app/_assets/redux/store";
 import { Breadcrumb, Image, Table } from "antd";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { formattedPrice } from "@/app/_assets/libs";
 import Link from "next/link";
+import axios from "axios";
 
 const Checkout: React.FC = () => {
   const cartState = useSelector((state: RootState) => state.cart);
@@ -13,6 +15,100 @@ const Checkout: React.FC = () => {
   if (typeof window !== "undefined") {
     order = JSON.parse(localStorage.getItem("order") || "{}");
   }
+
+  useEffect(() => {
+    const host: string = "https://provinces.open-api.vn/api/";
+
+    const callAPI = (api: string) => {
+      axios
+        .get(api)
+        .then((response) => {
+          renderData(response.data, "city");
+        })
+        .catch((error) => {
+          console.log("Error: ", error);
+        });
+    };
+
+    callAPI(`${host}?depth=1`);
+
+    const callApiDistrict = (api: string) => {
+      axios
+        .get(api)
+        .then((response) => {
+          renderData(response.data.districts, "district");
+        })
+        .catch((error) => {
+          console.log("ERROR", error);
+        });
+    };
+
+    const callApiWard = (api: string) => {
+      axios
+        .get(api)
+        .then((response) => {
+          renderData(response.data.wards, "ward");
+        })
+        .catch((error) => {
+          console.log("ERROR", error);
+        });
+    };
+
+    const renderData = (array: any[], select: string) => {
+      let row = ' <option disable value="">Select</option>';
+      array.forEach((element) => {
+        row += `<option data-id="${element.code}" value="${element.name}">${element.name}</option>`;
+      });
+      const selectElement = document.querySelector<HTMLSelectElement>(
+        "#" + select
+      );
+      if (selectElement) {
+        selectElement.innerHTML = row;
+      }
+    };
+
+    const handleCityChange = () => {
+      const selectedCity = document.querySelector<HTMLSelectElement>(
+        "#city option:checked"
+      );
+      if (selectedCity) {
+        const cityId = selectedCity.dataset.id;
+        if (cityId) {
+          callApiDistrict(`${host}p/${cityId}?depth=2`);
+        }
+      }
+    };
+
+    const handleDistrictChange = () => {
+      const selectedDistrict = document.querySelector<HTMLSelectElement>(
+        "#district option:checked"
+      );
+      if (selectedDistrict) {
+        const districtId = selectedDistrict.dataset.id;
+        if (districtId) {
+          callApiWard(`${host}d/${districtId}?depth=2`);
+        }
+      }
+    };
+
+    document
+      .querySelector<HTMLSelectElement>("#city")
+      ?.addEventListener("change", handleCityChange);
+
+    document
+      .querySelector<HTMLSelectElement>("#district")
+      ?.addEventListener("change", handleDistrictChange);
+
+    return () => {
+      document
+        .querySelector<HTMLSelectElement>("#city")
+        ?.removeEventListener("change", handleCityChange);
+
+      document
+        .querySelector<HTMLSelectElement>("#district")
+        ?.removeEventListener("change", handleDistrictChange);
+    };
+  }, []);
 
   let totalPrice = 0;
   let totalProducts = 0;
@@ -51,12 +147,17 @@ const Checkout: React.FC = () => {
               border: "1px solid #ccc",
               borderRadius: "4px",
               width: 80,
-              marginRight: "10px",
             }}
             src={record.img}
             alt=""
           />
-          <p>{record.name}</p>
+          <p
+            style={{
+              marginLeft: "10px",
+            }}
+          >
+            {record.name}
+          </p>
         </div>
       ),
     },
@@ -175,7 +276,9 @@ const Checkout: React.FC = () => {
                         className="required"
                         title="required"
                         style={{ marginLeft: 4 }}
-                      ></span>
+                      >
+                        *
+                      </span>
                     </label>
                     <input
                       type="text"
@@ -202,6 +305,35 @@ const Checkout: React.FC = () => {
                     )}
                   </div>
                   <div className="item">
+                    <label htmlFor="city">
+                      <p>City</p>
+                      <span
+                        className="required"
+                        title="required"
+                        style={{ marginLeft: 4 }}
+                      >
+                        *
+                      </span>
+                    </label>
+                    <select
+                      id="city"
+                      className="input"
+                      {...register("City", {
+                        validate: (value) =>
+                          value !== "" || "Please select a city.",
+                      })}
+                    >
+                      <option value="" selected>
+                        Select City
+                      </option>
+                    </select>
+                    {errors.City && typeof errors.City.message === "string" && (
+                      <p style={{ marginTop: 10, color: "red" }}>
+                        {errors.City.message}
+                      </p>
+                    )}
+                  </div>
+                  <div className="item">
                     <label htmlFor="district">
                       <p>District</p>
                       <span
@@ -212,21 +344,51 @@ const Checkout: React.FC = () => {
                         *
                       </span>
                     </label>
-                    <input
-                      type="text"
+                    <select
                       id="district"
-                      defaultValue={order.District}
-                      aria-invalid={errors.District ? "true" : "false"}
                       className="input"
                       {...register("District", {
-                        required: true,
-                        maxLength: 100,
+                        validate: (value) =>
+                          value !== "" || "Please select a district.",
                       })}
-                      placeholder="District"
-                    />
-                    {errors.District?.type === "required" && (
+                    >
+                      <option value="" selected>
+                        Select District
+                      </option>
+                    </select>
+                    {errors.District &&
+                      typeof errors.District.message === "string" && (
+                        <p style={{ marginTop: 10, color: "red" }}>
+                          {errors.District.message}
+                        </p>
+                      )}
+                  </div>
+                  <div className="item">
+                    <label htmlFor="ward">
+                      <p>Ward</p>
+                      <span
+                        className="required"
+                        title="required"
+                        style={{ marginLeft: 4 }}
+                      >
+                        *
+                      </span>
+                    </label>
+                    <select
+                      id="ward"
+                      className="input"
+                      {...register("Ward", {
+                        validate: (value) =>
+                          value !== "" || "Please select a ward.",
+                      })}
+                    >
+                      <option value="" selected>
+                        Select Ward
+                      </option>
+                    </select>
+                    {errors.Ward && typeof errors.Ward.message === "string" && (
                       <p style={{ marginTop: 10, color: "red" }}>
-                        District can not be left blank.
+                        {errors.Ward.message}
                       </p>
                     )}
                   </div>
@@ -237,7 +399,9 @@ const Checkout: React.FC = () => {
                         className="required"
                         title="required"
                         style={{ marginLeft: 4 }}
-                      ></span>
+                      >
+                        *
+                      </span>
                     </label>
                     <input
                       type="text"
@@ -289,7 +453,16 @@ const Checkout: React.FC = () => {
                 </div>
               </div>
               <div className="method">
-                <h3>Payment</h3>
+                <h3>
+                  Payment
+                  <span
+                    className="required"
+                    title="required"
+                    style={{ marginLeft: 4 }}
+                  >
+                    *
+                  </span>
+                </h3>
                 <div className="list">
                   <div className="method_item">
                     <label htmlFor="item1" className="item">

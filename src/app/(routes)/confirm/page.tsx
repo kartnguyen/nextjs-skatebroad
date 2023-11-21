@@ -58,12 +58,11 @@ const Confirm = () => {
               border: "1px solid #ccc",
               borderRadius: "4px",
               width: 80,
-              marginRight: "10px",
             }}
             src={record.img}
             alt=""
           />
-          <p>{record.name}</p>
+          <p style={{ marginLeft: "10px" }}>{record.name}</p>
         </div>
       ),
     },
@@ -219,7 +218,7 @@ const Confirm = () => {
             <div className="order_item">
               <p style={{ textDecoration: "underline" }}>Address</p>
               <p>
-                {order.Address}, {order.District} District
+                {order.Address}, {order.Ward}, {order.District}, {order.City}
               </p>
             </div>
             <div className="order_item">
