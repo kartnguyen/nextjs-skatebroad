@@ -62,7 +62,9 @@ const Confirm = () => {
             src={record.img}
             alt=""
           />
-          <p style={{ marginLeft: "10px" }}>{record.name}</p>
+          <p className="pro_name" style={{ marginLeft: "10px" }}>
+            {record.name}
+          </p>
         </div>
       ),
     },

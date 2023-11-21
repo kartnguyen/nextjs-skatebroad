@@ -152,6 +152,7 @@ const Checkout: React.FC = () => {
             alt=""
           />
           <p
+            className="pro_name"
             style={{
               marginLeft: "10px",
             }}
