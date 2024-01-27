@@ -20,34 +20,42 @@ import Notification from "@/app/_assets/components/Notification";
 import { MDBCarousel, MDBCarouselItem } from "mdb-react-ui-kit";
 import { useDispatch } from "react-redux";
 import { add } from "@/app/_assets/redux/features/cart/cartSlice";
+import { useRouter } from "next/navigation";
 
 const Products: React.FC = () => {
   const [showImage, setShowImage] = useState<boolean>(false);
   const [currentImg, setCurrentImg] = useState<string>("");
   const [sortingLabel, setSortingLabel] = useState<string>("Sorting");
   const [open, setOpen] = useState<boolean>(false);
-  const [currentFilter, setCurrentFilter] = useState<string>("");
-  const [currentFilterType, setCurrentFilterType] = useState<string>("");
+  const [selectedFilters, setSelectedFilters] = useState<
+    { type: string; value: string }[]
+  >([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [sort, setSort] = useState<string>("");
 
   const { products, error, isLoading } = ProductServices();
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const filteredProducts = (): IProduct[] => {
-    if (currentFilter === "" && currentFilterType === "" && sort === "") {
+    if (selectedFilters.length === 0 && sort === "") {
       return products.result;
     }
 
     const filterProducts = products.result.filter((product: IProduct) => {
-      if (currentFilterType === "category") {
-        return product.category === currentFilter;
-      } else if (currentFilterType === "size") {
-        return product.size === currentFilter;
-      } else if (currentFilterType === "color") {
-        return product.color === currentFilter;
-      }
-      return true;
+      return selectedFilters.every((filter) => {
+        const { type, value } = filter;
+        if (type === "category" && value !== "") {
+          return product.category === value;
+        }
+        if (type === "size" && value !== "") {
+          return product.size === value;
+        }
+        if (type === "color" && value !== "") {
+          return product.color === value;
+        }
+        return true;
+      });
     });
 
     if (sort === "Alphabetically, A-Z") {
@@ -64,6 +72,14 @@ const Products: React.FC = () => {
       );
     }
 
+    const filtersQueryString = selectedFilters
+      .filter((filter) => filter.value !== "")
+      .map(({ type, value }) => `${type}=${value}`)
+      .join("&");
+
+    const newUrl = `products?${filtersQueryString.toString()}`;
+    router.replace(newUrl, undefined);
+
     return filterProducts;
   };
 
@@ -78,12 +94,32 @@ const Products: React.FC = () => {
     document.body.classList.add("overflow-hidden");
     setTimeout(() => {
       setLoading(false);
-      setCurrentFilter(params);
-      setCurrentFilterType(type);
+      setSelectedFilters((prevFilters) => {
+        const updatedFilters = prevFilters.map((filter) => {
+          if (filter.type === type) {
+            return { type, value: params };
+          }
+          return filter;
+        });
+        if (!updatedFilters.some((filter) => filter.type === type)) {
+          return [...updatedFilters, { type, value: params }];
+        }
+
+        return updatedFilters;
+      });
       document.body.classList.remove("overflow-hidden");
-    }, 800);
+    }, 500);
   };
 
+  const handleClearFilter = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      setSelectedFilters([]);
+      onClose();
+      router.push("/products");
+    }, 100);
+  };
   const handleSortingLabel = (label: string): void => {
     setSortingLabel(label);
     setSort(label);
@@ -116,6 +152,8 @@ const Products: React.FC = () => {
 
   if (isLoading) return <Loader />;
   if (!products) return null;
+
+  const productsToDisplay = filteredProducts();
 
   return (
     <section>
@@ -155,7 +193,11 @@ const Products: React.FC = () => {
                   <ul>
                     <li
                       className={`cate ${
-                        currentFilter === "Featured" ? "active" : ""
+                        selectedFilters.some(
+                          (filter) => filter.value === "Featured"
+                        )
+                          ? "active"
+                          : ""
                       }`}
                       onClick={() => {
                         handleFilter({
@@ -170,7 +212,11 @@ const Products: React.FC = () => {
                     </li>
                     <li
                       className={`cate ${
-                        currentFilter === "Top Seller" ? "active" : ""
+                        selectedFilters.some(
+                          (filter) => filter.value === "Top Seller"
+                        )
+                          ? "active"
+                          : ""
                       }`}
                       onClick={() => {
                         handleFilter({
@@ -185,7 +231,11 @@ const Products: React.FC = () => {
                     </li>
                     <li
                       className={`cate ${
-                        currentFilter === "Latest" ? "active" : ""
+                        selectedFilters.some(
+                          (filter) => filter.value === "Latest"
+                        )
+                          ? "active"
+                          : ""
                       }`}
                       onClick={() => {
                         handleFilter({
@@ -207,7 +257,11 @@ const Products: React.FC = () => {
                   <ul className="size">
                     <li>
                       <button
-                        className={currentFilter === "S" ? "active" : ""}
+                        className={`${
+                          selectedFilters.some((filter) => filter.value === "S")
+                            ? "active"
+                            : ""
+                        }`}
                         onClick={() => {
                           handleFilter({
                             type: "size",
@@ -221,7 +275,11 @@ const Products: React.FC = () => {
                     </li>
                     <li>
                       <button
-                        className={currentFilter === "M" ? "active" : ""}
+                        className={`${
+                          selectedFilters.some((filter) => filter.value === "M")
+                            ? "active"
+                            : ""
+                        }`}
                         onClick={() => {
                           handleFilter({
                             type: "size",
@@ -235,7 +293,11 @@ const Products: React.FC = () => {
                     </li>
                     <li>
                       <button
-                        className={currentFilter === "L" ? "active" : ""}
+                        className={`${
+                          selectedFilters.some((filter) => filter.value === "L")
+                            ? "active"
+                            : ""
+                        }`}
                         onClick={() => {
                           handleFilter({
                             type: "size",
@@ -257,7 +319,11 @@ const Products: React.FC = () => {
                     <li>
                       <button
                         className={`color ${
-                          currentFilter === "Black" ? "active" : ""
+                          selectedFilters.some(
+                            (filter) => filter.value === "Black"
+                          )
+                            ? "active"
+                            : ""
                         }`}
                         style={{ backgroundColor: "black" }}
                         onClick={() => {
@@ -272,7 +338,11 @@ const Products: React.FC = () => {
                     <li>
                       <button
                         className={`color ${
-                          currentFilter === "Blue" ? "active" : ""
+                          selectedFilters.some(
+                            (filter) => filter.value === "Blue"
+                          )
+                            ? "active"
+                            : ""
                         }`}
                         style={{ backgroundColor: "blue" }}
                         onClick={() => {
@@ -287,7 +357,11 @@ const Products: React.FC = () => {
                     <li>
                       <button
                         className={`color ${
-                          currentFilter === "White" ? "active" : ""
+                          selectedFilters.some(
+                            (filter) => filter.value === "White"
+                          )
+                            ? "active"
+                            : ""
                         }`}
                         style={{ backgroundColor: "white" }}
                         onClick={() => {
@@ -301,18 +375,7 @@ const Products: React.FC = () => {
                     </li>
                   </ul>
                 </div>
-                <button
-                  className="clear-filter"
-                  onClick={() => {
-                    setLoading(true);
-                    setTimeout(() => {
-                      setLoading(false);
-                      setCurrentFilter("");
-                      setCurrentFilterType("");
-                      onClose();
-                    }, 500);
-                  }}
-                >
+                <button className="clear-filter" onClick={handleClearFilter}>
                   Clear Filtered
                 </button>
               </div>
@@ -338,40 +401,49 @@ const Products: React.FC = () => {
             </Dropdown>
           </div>
         </div>
-        <div className="products-container">
-          {filteredProducts()?.map((product: IProduct) => (
-            <div key={product.id} className="products">
-              <Link href={`/products/${product.id}`}>
-                <div
-                  className="img"
-                  style={{ backgroundImage: `url(${product.thumbnail})` }}
-                ></div>
-              </Link>
-              <div className="content">
+        {productsToDisplay.length > 0 ? (
+          <div className="products-container">
+            {productsToDisplay.map((product: IProduct) => (
+              <div key={product.id} className="products">
                 <Link href={`/products/${product.id}`}>
-                  <h4>{product.name}</h4>
+                  <div
+                    className="img"
+                    style={{ backgroundImage: `url(${product.thumbnail})` }}
+                  ></div>
                 </Link>
-                <p>{formattedPrice(product.price)}</p>
-              </div>
-              <div className="menu">
-                <div className="icon" onClick={() => onAddItem(product)}>
-                  <ShoppingOutlined title="Add To Cart" />
+                <div className="content">
+                  <Link href={`/products/${product.id}`}>
+                    <h4>{product.name}</h4>
+                  </Link>
+                  <p>{formattedPrice(product.price)}</p>
                 </div>
-                <div
-                  className="icon"
-                  onClick={() => handleQuickview(product.id)}
-                >
-                  <SearchOutlined title="Quickview" />
-                </div>
-                <Link href={"/wishlist"} id="wishlist-btn">
-                  <div className="icon">
-                    <HeartOutlined title="Add To Wishlist" />
+                <div className="menu">
+                  <div className="icon" onClick={() => onAddItem(product)}>
+                    <ShoppingOutlined title="Add To Cart" />
                   </div>
-                </Link>
+                  <div
+                    className="icon"
+                    onClick={() => handleQuickview(product.id)}
+                  >
+                    <SearchOutlined title="Quickview" />
+                  </div>
+                  <Link href={"/wishlist"} id="wishlist-btn">
+                    <div className="icon">
+                      <HeartOutlined title="Add To Wishlist" />
+                    </div>
+                  </Link>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <div className="no-results">
+            <h1>No products found!</h1>
+            <button className="clear-filter" onClick={handleClearFilter}>
+              Clear Filtered
+            </button>
+          </div>
+        )}
       </div>
       {showImage ? (
         <div className="img-quickview-container">
